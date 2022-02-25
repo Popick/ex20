@@ -13,7 +13,7 @@ public class new_user_activity extends AppCompatActivity {
     SQLiteDatabase db;
     HelperDB hlp;
 
-    EditText idET, fnameET, lnameET, cardET, companyET, phoneET;
+    EditText idET, fnameET, lnameET, companyET, phoneET;
     String id, a;
     int sum = 0, bikoret, num, allValid;
     ContentValues cv;
@@ -24,14 +24,12 @@ public class new_user_activity extends AppCompatActivity {
         setContentView(R.layout.activity_new_user);
 
         hlp = new HelperDB(this);
-        db = hlp.getWritableDatabase();
-        db.close();
+
 
 
         idET = (EditText) findViewById(R.id.inputid);
         fnameET = (EditText) findViewById(R.id.inputfname);
         lnameET = (EditText) findViewById(R.id.inputlname);
-        cardET = (EditText) findViewById(R.id.inputcard);
         companyET = (EditText) findViewById(R.id.inputcompany);
         phoneET = (EditText) findViewById(R.id.inputphonenumber);
 
@@ -56,11 +54,6 @@ public class new_user_activity extends AppCompatActivity {
         } else {
             allValid++;
         }
-        if (!(cardET.getText().length() == 6)) {
-            cardET.setError("Must Be 6 Digits Long");
-        } else {
-            allValid++;
-        }
         if (!idVerification()) {
             idET.setError("Invalid ID");
         } else {
@@ -71,14 +64,14 @@ public class new_user_activity extends AppCompatActivity {
         } else {
             allValid++;
         }
-        if (allValid == 6) {
+        if (allValid == 5) {
 
             cv.put(Users.FNAME, fnameET.getText().toString());
             cv.put(Users.LNAME, lnameET.getText().toString());
             cv.put(Users.COMPANY, companyET.getText().toString());
-            cv.put(Users.CARD_ID, cardET.getText().toString());
             cv.put(Users.ID, idET.getText().toString());
             cv.put(Users.PHONE, phoneET.getText().toString());
+            cv.put(Users.ACTIVE, 1);
 
             db = hlp.getWritableDatabase();
             db.insert(Users.TABLE_USERS, null, cv);

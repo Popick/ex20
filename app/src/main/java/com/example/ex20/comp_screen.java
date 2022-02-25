@@ -1,75 +1,76 @@
 package com.example.ex20;
 
-import androidx.appcompat.app.AppCompatActivity;
+        import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+        import android.app.AlertDialog;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.database.Cursor;
+        import android.database.sqlite.SQLiteDatabase;
+        import android.os.Bundle;
+        import android.view.View;
+        import android.widget.AdapterView;
+        import android.widget.ArrayAdapter;
+        import android.widget.ImageButton;
+        import android.widget.ListView;
 
-import java.util.ArrayList;
+        import java.util.ArrayList;
 
-public class users_screen extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class comp_screen extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ListView lv;
     SQLiteDatabase db;
     HelperDB hlp;
-    Intent newUserIntent, viewUserIntent;
+    ImageButton addBtn;
+    Intent newCompanyIntent, viewCompanyIntent;
     Cursor crsr;
     ArrayList<String> tbl;
     ArrayList<String> cardIDs;
     ArrayAdapter<String> adp;
     AlertDialog.Builder adb;
     final String[] filterAD = {"Active", "Inactive"};
-    final String[] sortAD = {"Card-ID","Name A→Z", "Name Z→A","Company A→Z"};
+    final String[] sortAD = {"Key ID","Name A→Z", "Name Z→A","Tax Number 0→9"};
     String filter="1",sort;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ta_screen);
-        newUserIntent = new Intent(this, new_user_activity.class);
-        viewUserIntent = new Intent(this, view_user_activity.class);
+        newCompanyIntent = new Intent(this, new_company_activity.class);
+        viewCompanyIntent = new Intent(this, view_company_activity.class);
         hlp = new HelperDB(this);
-
+        addBtn = (ImageButton) findViewById(R.id.addBtn);
+        addBtn.setImageResource(R.drawable.addcomp);
 
 
         lv = (ListView) findViewById(R.id.listview);
         lv.setOnItemClickListener(this);
         lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        update_users(filter,sort);
+        update_comps(filter,sort);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        update_users(filter,sort);
+        update_comps(filter,sort);
     }
 
-    public void update_users(String filterPar, String sortPar) {
+    public void update_comps(String filterPar, String sortPar) {
         db = hlp.getWritableDatabase();
         tbl = new ArrayList<>();
         cardIDs = new ArrayList<>();
         if (filterPar != null)
-            crsr = db.query(Users.TABLE_USERS, null, Users.ACTIVE + "=?", new String[]{filterPar}, null, null, sortPar);
+            crsr = db.query(Companies.TABLE_COMPANIES, null, Companies.ACTIVE + "=?", new String[]{filterPar}, null, null, sortPar);
         else
-            crsr = db.query(Users.TABLE_USERS, null, null, null, null, null, sortPar);
+            crsr = db.query(Companies.TABLE_COMPANIES, null, null, null, null, null, sortPar);
 
-        int col1 = crsr.getColumnIndex(Users.KEY_ID);
-        int col2 = crsr.getColumnIndex(Users.FNAME);
-        int col3 = crsr.getColumnIndex(Users.LNAME);
+        int col1 = crsr.getColumnIndex(Companies.KEY_ID);
+        int col2 = crsr.getColumnIndex(Companies.NAME);
 
         crsr.moveToFirst();
         while (!crsr.isAfterLast()) {
             int key = crsr.getInt(col1);
-            String fname = crsr.getString(col2);
-            String lname = crsr.getString(col3);
-            String tmp = "" + key + ". " + fname + " " + lname;
+            String name = crsr.getString(col2);
+            String tmp = "" + key + ". " + name;
             tbl.add(tmp);
             cardIDs.add(key+"");
             crsr.moveToNext();
@@ -81,7 +82,7 @@ public class users_screen extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void addPerson(View view) {
-        startActivity(newUserIntent);
+        startActivity(newCompanyIntent);
     }
 
     public void back(View view) {
@@ -90,21 +91,21 @@ public class users_screen extends AppCompatActivity implements AdapterView.OnIte
 
     public void sort(View view) {
         adb = new AlertDialog.Builder(this);
-        adb.setTitle("Sort Employees");
+        adb.setTitle("Sort Companies");
         adb.setItems(sortAD, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int pos) {
                 if(pos==0){
-                    sort = Users.KEY_ID;
+                    sort = Companies.KEY_ID;
                 }else if(pos==1){
-                    sort = Users.FNAME;
+                    sort = Companies.NAME;
                 }else if(pos==2){
-                    sort = Users.FNAME+" DESC";
+                    sort = Companies.NAME+" DESC";
                 }else if(pos==3){
-                    sort = Users.COMPANY;
+                    sort = Companies.TAX_ID;
                 }
                 System.out.println("filter: "+filter+", sort: "+sort);
-                update_users(filter,sort);
+                update_comps(filter,sort);
             }
         });
         AlertDialog ad = adb.create();
@@ -135,7 +136,7 @@ public class users_screen extends AppCompatActivity implements AdapterView.OnIte
                     filter="3";
                 }
                 System.out.println("filter: "+filter+", sort: "+sort);
-                update_users(filter,sort);
+                update_comps(filter,sort);
             }
         });
         adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -152,10 +153,10 @@ public class users_screen extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        viewUserIntent.putExtra("id", cardIDs.get(position));
-        System.out.println(tbl.get(position));
-
-
-        startActivity(viewUserIntent);
+        viewCompanyIntent.putExtra("id", cardIDs.get(position));
+//        System.out.println(tbl.get(position));
+        startActivity(viewCompanyIntent);
     }
+
+
 }

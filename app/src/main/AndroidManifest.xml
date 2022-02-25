@@ -10,6 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ex20">
         <activity
+            android:name=".view_order_activity"
+            android:exported="true" />
+        <activity
+            android:name=".order_screen"
+            android:exported="true" />
+        <activity
+            android:name=".new_order_activity"
+            android:exported="true" />
+        <activity
+            android:name=".new_order_second_activity"
+            android:exported="true" />
+        <activity
+            android:name=".view_company_activity"
+            android:exported="true" />
+        <activity
+            android:name=".new_company_activity"
+            android:exported="true" />
+        <activity
             android:name=".view_user_activity"
             android:exported="true" />
         <activity
@@ -17,6 +35,9 @@
             android:exported="true" />
         <activity
             android:name=".users_screen"
+            android:exported="true" />
+        <activity
+            android:name=".comp_screen"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

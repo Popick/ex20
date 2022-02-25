@@ -17,37 +17,35 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class view_user_activity extends AppCompatActivity {
+public class view_company_activity extends AppCompatActivity {
+
     Intent gi;
-    TextView idTV, fnameTV, lnameTV, companyTV, phoneTV;
+    TextView nameTV, taxTV, sPhoneTV, mPhoneTV;
     Button greenBtn, redBtn, orangeBtn;
     SQLiteDatabase db;
     HelperDB hlp;
     Intent newUserIntent, viewUserIntent;
     Cursor crsr;
     ContentValues cv;
-    String userKeyId = "";
+    String companyKeyId = "";
     AlertDialog.Builder adb;
     boolean isActive = true;
     int col1, col2, col3, col4, col5,col6;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_user);
+        setContentView(R.layout.activity_view_company);
         gi = getIntent();
-        userKeyId = gi.getStringExtra("id");
+        companyKeyId = gi.getStringExtra("id");
 
 
         redBtn = (Button) findViewById(R.id.redButton);
         greenBtn = (Button) findViewById(R.id.greenButton);
         orangeBtn = (Button) findViewById(R.id.orangeButton);
-        idTV = (TextView) findViewById(R.id.inputid);
-        fnameTV = (TextView) findViewById(R.id.inputfname);
-        lnameTV = (TextView) findViewById(R.id.inputlname);
-//        cardTV = (TextView) findViewById(R.id.view_card);
-        companyTV = (TextView) findViewById(R.id.inputcompany);
-        phoneTV = (TextView) findViewById(R.id.inputphonenumber);
+        nameTV = (TextView) findViewById(R.id.inputappetizer);
+        taxTV = (TextView) findViewById(R.id.inputtax);
+        mPhoneTV = (TextView) findViewById(R.id.inputmphone);
+        sPhoneTV = (TextView) findViewById(R.id.inputsphone);
 
         hlp = new HelperDB(this);
         db = hlp.getWritableDatabase();
@@ -56,36 +54,38 @@ public class view_user_activity extends AppCompatActivity {
         ArrayList<String> tbl = new ArrayList<>();
         ArrayAdapter<String> adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, new String[]{});
 
-        fillUser();
+        fillCompany();
         cv = new ContentValues();
 
         if (!isActive){
-            orangeBtn.setText("Restore Employee");
+            orangeBtn.setText("Restore Comapny");
             orangeBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.restore, 0);
         }
     }
 
-    public void fillUser(){
-        String selection = Users.KEY_ID + "=?";
-        String[] selectionArgs = {userKeyId};
-        System.out.println(userKeyId);
+    public void fillCompany(){
+        String[] columns = null;
+        String selection = Companies.KEY_ID + "=?";
+        String[] selectionArgs = {companyKeyId};
+        System.out.println(companyKeyId);
+        String groupBy = null;
+        String having = "1";
+        String orderBy = null;
+        String limit = null;
         db = hlp.getReadableDatabase();
-        crsr = db.query(Users.TABLE_USERS, null, selection, selectionArgs, null, null, null);
-        col1 = crsr.getColumnIndex(Users.FNAME);
-        col2 = crsr.getColumnIndex(Users.LNAME);
-        col3 = crsr.getColumnIndex(Users.COMPANY);
-        col4 = crsr.getColumnIndex(Users.ID);
-        col5 = crsr.getColumnIndex(Users.PHONE);
-        col6 = crsr.getColumnIndex(Users.ACTIVE);
+        crsr = db.query(Companies.TABLE_COMPANIES, null, selection, selectionArgs, null, null, null);
+        col1 = crsr.getColumnIndex(Companies.NAME);
+        col2 = crsr.getColumnIndex(Companies.TAX_ID);
+        col3 = crsr.getColumnIndex(Companies.MAIN_PHONE);
+        col4 = crsr.getColumnIndex(Companies.SECONDARY_PHONE);
+        col5 = crsr.getColumnIndex(Companies.ACTIVE);
 
         crsr.moveToFirst();
-        fnameTV.setText(crsr.getString(col1));
-        lnameTV.setText(crsr.getString(col2));
-        companyTV.setText(crsr.getString(col3));
-        idTV.setText(crsr.getString(col4));
-        phoneTV.setText(crsr.getString(col5));
-        if(crsr.getString(col6).equals("1")) isActive = true;
-        else isActive = false;
+        nameTV.setText(crsr.getString(col1));
+        taxTV.setText(crsr.getString(col2));
+        mPhoneTV.setText(crsr.getString(col3));
+        sPhoneTV.setText(crsr.getString(col4));
+        isActive = crsr.getString(col5).equals("1");
         db.close();
         crsr.close();
     }
@@ -96,13 +96,12 @@ public class view_user_activity extends AppCompatActivity {
         } else if (redBtn.getText().toString().equals("CANCEL")) {
             greenBtn.setText("EDIT");
             redBtn.setText("BACK");
-            idTV.setEnabled(false);
-            fnameTV.setEnabled(false);
-            lnameTV.setEnabled(false);
-            companyTV.setEnabled(false);
-            phoneTV.setEnabled(false);
+            nameTV.setEnabled(false);
+            taxTV.setEnabled(false);
+            mPhoneTV.setEnabled(false);
+            sPhoneTV.setEnabled(false);
             orangeBtn.setEnabled(false);
-            fillUser();
+            fillCompany();
         }
     }
 
@@ -111,22 +110,19 @@ public class view_user_activity extends AppCompatActivity {
         if (greenBtn.getText().toString().equals("EDIT")) {
             greenBtn.setText("SAVE");
             redBtn.setText("CANCEL");
-            idTV.setEnabled(true);
-            fnameTV.setEnabled(true);
-            lnameTV.setEnabled(true);
-            companyTV.setEnabled(true);
-            phoneTV.setEnabled(true);
+            nameTV.setEnabled(true);
+            taxTV.setEnabled(true);
+            mPhoneTV.setEnabled(true);
+            sPhoneTV.setEnabled(true);
             orangeBtn.setEnabled(true);
         } else if (greenBtn.getText().toString().equals("SAVE")) {
             ContentValues cv = new ContentValues();
             db = hlp.getWritableDatabase();
-            cv.put(Users.FNAME, fnameTV.getText().toString());
-            cv.put(Users.LNAME, lnameTV.getText().toString());
-            cv.put(Users.COMPANY, companyTV.getText().toString());
-            cv.put(Users.ID, idTV.getText().toString());
-            cv.put(Users.PHONE, phoneTV.getText().toString());
-//            db.update(Users.TABLE_USERS,cv,Users.KEY_ID, new String[]{userKeyId+""});
-            db.update(Users.TABLE_USERS, cv, Users.KEY_ID + "=?", new String[]{userKeyId});
+            cv.put(Companies.NAME, nameTV.getText().toString());
+            cv.put(Companies.TAX_ID, taxTV.getText().toString());
+            cv.put(Companies.MAIN_PHONE, mPhoneTV.getText().toString());
+            cv.put(Companies.SECONDARY_PHONE, sPhoneTV.getText().toString());
+            db.update(Companies.TABLE_COMPANIES, cv, Users.KEY_ID + "=?", new String[]{companyKeyId});
 
             db.close();
 
@@ -138,19 +134,19 @@ public class view_user_activity extends AppCompatActivity {
     public void delete(View view) {
         adb = new AlertDialog.Builder(this);
         adb.setTitle("Are You Sure?");
-        if(isActive) adb.setMessage("Are you sure you want to delete the employee?");
-        else adb.setMessage("Are you sure you want to restore the employee?");
+        if(isActive) adb.setMessage("Are you sure you want to delete the company?");
+        else adb.setMessage("Are you sure you want to restore the company?");
         adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 ContentValues cv = new ContentValues();
-                if(isActive) cv.put(Users.ACTIVE, 0);
-                else cv.put(Users.ACTIVE, 1);
+                if(isActive) cv.put(Companies.ACTIVE, 0);
+                else cv.put(Companies.ACTIVE, 1);
                 db = hlp.getWritableDatabase();
-                db.update(Users.TABLE_USERS, cv, Users.KEY_ID + "=?", new String[]{userKeyId});
+                db.update(Companies.TABLE_COMPANIES, cv, Companies.KEY_ID + "=?", new String[]{companyKeyId});
                 db.close();
 
-                Toast.makeText(view_user_activity.this, "Deleted Successfully!", Toast.LENGTH_LONG).show();
+                Toast.makeText(view_company_activity.this, "Deleted Successfully!", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
