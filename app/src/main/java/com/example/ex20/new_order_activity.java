@@ -10,9 +10,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
+/**
+ * @author Etay Sabag <itay45520@gmail.com>
+ * @version    1.2
+ * @since     19/2/2022
+ * first activity of making a new order
+ */
 public class new_order_activity extends AppCompatActivity {
     Intent si;
     SQLiteDatabase db;
@@ -36,6 +39,9 @@ public class new_order_activity extends AppCompatActivity {
         cv = new ContentValues();
     }
 
+    /**
+     * The function checks if the input is okay, if so it launches the next activity activity.
+     */
     public void next(View view) {
         allValid = 0;
         if (appetizerET.getText().length() == 0) {
@@ -67,15 +73,20 @@ public class new_order_activity extends AppCompatActivity {
             startActivityForResult(si,1);
         }
     }
+    /**
+     * The function sends the user to the last activity.
+     */
     public void back(View view) {
         finish();
     }
-
+    /**
+     * When returning from the second new order activity The function takes in the input from the
+     * input fields, and adds it to the meals data base.
+     */
     @Override
     protected void onActivityResult(int source, int good, @Nullable Intent data_back) {
         super.onActivityResult(source, good, data_back);
-        if (good==RESULT_OK){
-
+        if (good==RESULT_OK && source == 1){
             cv.put(Meals.APPETIZER, appetizerET.getText().toString());
             cv.put(Meals.MAIN, mainET.getText().toString());
             cv.put(Meals.SIDE, sideET.getText().toString());
@@ -86,10 +97,7 @@ public class new_order_activity extends AppCompatActivity {
             db.insert(Meals.TABLE_MEALS, null, cv);
             db.close();
 
-            System.out.println("aaaaa");
             finish();
-        }else{
-            System.out.println("bbbbbbb");
         }
     }
 

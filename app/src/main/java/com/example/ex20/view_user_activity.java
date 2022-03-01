@@ -10,12 +10,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 
 public class view_user_activity extends AppCompatActivity {
     Intent gi;
@@ -23,14 +21,18 @@ public class view_user_activity extends AppCompatActivity {
     Button greenBtn, redBtn, orangeBtn;
     SQLiteDatabase db;
     HelperDB hlp;
-    Intent newUserIntent, viewUserIntent;
     Cursor crsr;
     ContentValues cv;
     String userKeyId = "";
     AlertDialog.Builder adb;
     boolean isActive = true;
     int col1, col2, col3, col4, col5,col6;
-
+    /**
+     * @author Etay Sabag <itay45520@gmail.com>
+     * @version    1.6
+     * @since     5/2/2022
+     *  activity for viewing and editing a specific user
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +47,6 @@ public class view_user_activity extends AppCompatActivity {
         idTV = (TextView) findViewById(R.id.inputid);
         fnameTV = (TextView) findViewById(R.id.inputfname);
         lnameTV = (TextView) findViewById(R.id.inputlname);
-//        cardTV = (TextView) findViewById(R.id.view_card);
         companyTV = (TextView) findViewById(R.id.inputcompany);
         phoneTV = (TextView) findViewById(R.id.inputphonenumber);
 
@@ -53,8 +54,6 @@ public class view_user_activity extends AppCompatActivity {
         db = hlp.getWritableDatabase();
         db.close();
 
-        ArrayList<String> tbl = new ArrayList<>();
-        ArrayAdapter<String> adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, new String[]{});
 
         fillUser();
         cv = new ContentValues();
@@ -65,10 +64,12 @@ public class view_user_activity extends AppCompatActivity {
         }
     }
 
+    /**
+     * The function loads the selected worker's data to the all the text views on the screen.
+     */
     public void fillUser(){
         String selection = Users.KEY_ID + "=?";
         String[] selectionArgs = {userKeyId};
-        System.out.println(userKeyId);
         db = hlp.getReadableDatabase();
         crsr = db.query(Users.TABLE_USERS, null, selection, selectionArgs, null, null, null);
         col1 = crsr.getColumnIndex(Users.FNAME);
@@ -84,12 +85,14 @@ public class view_user_activity extends AppCompatActivity {
         companyTV.setText(crsr.getString(col3));
         idTV.setText(crsr.getString(col4));
         phoneTV.setText(crsr.getString(col5));
-        if(crsr.getString(col6).equals("1")) isActive = true;
-        else isActive = false;
+        isActive = crsr.getString(col6).equals("1");
         db.close();
         crsr.close();
     }
-
+    /**
+     * The function checks if in edit mode or not, if in edit mode it will cancel all the changes
+     * else it will go back to the last activity
+     */
     public void back(View view) {
         if (redBtn.getText().toString().equals("BACK")) {
             finish();
@@ -105,8 +108,10 @@ public class view_user_activity extends AppCompatActivity {
             fillUser();
         }
     }
-
-
+    /**
+     * The function checks if in edit mode or not, if in edit mode it will save all the changes
+     * else it enter you into edit mode
+     */
     public void editsave(View view) {
         if (greenBtn.getText().toString().equals("EDIT")) {
             greenBtn.setText("SAVE");
@@ -125,7 +130,6 @@ public class view_user_activity extends AppCompatActivity {
             cv.put(Users.COMPANY, companyTV.getText().toString());
             cv.put(Users.ID, idTV.getText().toString());
             cv.put(Users.PHONE, phoneTV.getText().toString());
-//            db.update(Users.TABLE_USERS,cv,Users.KEY_ID, new String[]{userKeyId+""});
             db.update(Users.TABLE_USERS, cv, Users.KEY_ID + "=?", new String[]{userKeyId});
 
             db.close();
@@ -134,7 +138,9 @@ public class view_user_activity extends AppCompatActivity {
             finish();
         }
     }
-
+    /**
+     * The function will change the worker's employment state.
+     */
     public void delete(View view) {
         adb = new AlertDialog.Builder(this);
         adb.setTitle("Are You Sure?");

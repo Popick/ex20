@@ -119,7 +119,7 @@
                 android:layout_weight="20"
                 android:background="#81C784"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:onClick="addPerson"
+                android:onClick="addNewItem"
                 app:srcCompat="@drawable/addperson" />
 
             <Space

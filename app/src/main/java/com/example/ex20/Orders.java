@@ -1,5 +1,10 @@
 package com.example.ex20;
-
+/**
+ * @author Etay Sabag <itay45520@gmail.com>
+ * @version 1.1
+ * @since 21/2/2022
+ * Constants for the orders' table in the data base
+ */
 public class Orders {
     public static final String TABLE_ORDERS = "Orders";
     public static final String KEY_ID = "_id";

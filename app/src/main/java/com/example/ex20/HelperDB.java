@@ -6,7 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
-
+/**
+ * @author Etay Sabag <itay45520@gmail.com>
+ * @version 1.5
+ * @since 5/2/2022
+ * Helper to the data base class.
+ */
 public class HelperDB extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "dbexam.db";
     private static final int DATABASE_VERSION = 1;

@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/drawable/addcomp.xml" value="0.5526041666666667" />
+        <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/drawable/addperson.xml" value="0.5526041666666667" />
         <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/drawable/check.xml" value="0.44166666666666665" />
+        <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/layout/activity_credits.xml" value="0.4453125" />
         <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/layout/activity_new_company.xml" value="0.4453125" />
         <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/layout/activity_new_order.xml" value="0.67" />
@@ -17,6 +20,7 @@
         <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/layout/activity_view_user.xml" value="0.41041666666666665" />
         <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/layout/content_new_order_second.xml" value="0.5364583333333334" />
         <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/layout/fragment_first.xml" value="0.5364583333333334" />
+        <entry key="..\:/Projects/androidstudio/ex20/app/src/main/res/menu/main.xml" value="0.5364583333333334" />
         <entry key="..\:/Users/itay4/AndroidStudioProjects/ex20/app/src/main/res/drawable/addperson.xml" value="0.5703125" />
         <entry key="..\:/Users/itay4/AndroidStudioProjects/ex20/app/src/main/res/drawable/ic_baseline_people_alt_24.xml" value="0.5703125" />
         <entry key="..\:/Users/itay4/AndroidStudioProjects/ex20/app/src/main/res/drawable/meals.xml" value="0.5703125" />

@@ -8,14 +8,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
+/**
+ * @author Etay Sabag <itay45520@gmail.com>
+ * @version    1.4
+ * @since     19/2/2022
+ *  activity for making a new order
+ */
 public class new_company_activity extends AppCompatActivity {
 
     SQLiteDatabase db;
     HelperDB hlp;
 
     EditText nameET, taxET, mPhoneET, sPhoneET;
-    String id, a;
     int allValid;
     ContentValues cv;
 
@@ -38,6 +42,10 @@ public class new_company_activity extends AppCompatActivity {
 
     }
 
+    /**
+     * The function takes in the input from the input fields, checks if the input is valid and adds
+     * it to the data base.
+     */
     public void add(View view) {
         allValid = 0;
         if (nameET.getText().length() == 0) {
@@ -76,7 +84,9 @@ public class new_company_activity extends AppCompatActivity {
         }
 
     }
-
+    /**
+     * The function sends the user to the last activity.
+     */
     public void back(View view) {
         finish();
     }

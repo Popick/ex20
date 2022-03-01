@@ -60,7 +60,7 @@
                 android:layout_weight="1"
                 android:digits="qwertzuiopasdfghjklyxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM "
                 android:ems="10"
-                android:hint="Appatizer"
+                android:hint="Appetizer"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:textAlignment="center" />

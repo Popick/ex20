@@ -10,13 +10,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
+/**
+ * @author Etay Sabag <itay45520@gmail.com>
+ * @version    1.4
+ * @since     19/2/2022
+ *  activity for viewing and editing a specific company
+ */
 public class view_company_activity extends AppCompatActivity {
 
     Intent gi;
@@ -24,13 +27,13 @@ public class view_company_activity extends AppCompatActivity {
     Button greenBtn, redBtn, orangeBtn;
     SQLiteDatabase db;
     HelperDB hlp;
-    Intent newUserIntent, viewUserIntent;
     Cursor crsr;
     ContentValues cv;
     String companyKeyId = "";
     AlertDialog.Builder adb;
     boolean isActive = true;
-    int col1, col2, col3, col4, col5,col6;
+    int col1, col2, col3, col4, col5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,27 +54,22 @@ public class view_company_activity extends AppCompatActivity {
         db = hlp.getWritableDatabase();
         db.close();
 
-        ArrayList<String> tbl = new ArrayList<>();
-        ArrayAdapter<String> adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, new String[]{});
 
         fillCompany();
         cv = new ContentValues();
 
-        if (!isActive){
+        if (!isActive) {
             orangeBtn.setText("Restore Comapny");
             orangeBtn.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.restore, 0);
         }
     }
 
-    public void fillCompany(){
-        String[] columns = null;
+    /**
+    * The function loads the selected company's data to the all the text views on the screen.
+    */
+    public void fillCompany() {
         String selection = Companies.KEY_ID + "=?";
         String[] selectionArgs = {companyKeyId};
-        System.out.println(companyKeyId);
-        String groupBy = null;
-        String having = "1";
-        String orderBy = null;
-        String limit = null;
         db = hlp.getReadableDatabase();
         crsr = db.query(Companies.TABLE_COMPANIES, null, selection, selectionArgs, null, null, null);
         col1 = crsr.getColumnIndex(Companies.NAME);
@@ -89,7 +87,10 @@ public class view_company_activity extends AppCompatActivity {
         db.close();
         crsr.close();
     }
-
+    /**
+     * The function checks if in edit mode or not, if in edit mode it will cancel all the changes
+     * else it will go back to the last activity
+     */
     public void back(View view) {
         if (redBtn.getText().toString().equals("BACK")) {
             finish();
@@ -104,8 +105,10 @@ public class view_company_activity extends AppCompatActivity {
             fillCompany();
         }
     }
-
-
+    /**
+     * The function checks if in edit mode or not, if in edit mode it will save all the changes
+     * else it enter you into edit mode
+     * */
     public void editsave(View view) {
         if (greenBtn.getText().toString().equals("EDIT")) {
             greenBtn.setText("SAVE");
@@ -130,17 +133,19 @@ public class view_company_activity extends AppCompatActivity {
             finish();
         }
     }
-
+    /**
+    The function will change the worker's employment state.
+    **/
     public void delete(View view) {
         adb = new AlertDialog.Builder(this);
         adb.setTitle("Are You Sure?");
-        if(isActive) adb.setMessage("Are you sure you want to delete the company?");
+        if (isActive) adb.setMessage("Are you sure you want to delete the company?");
         else adb.setMessage("Are you sure you want to restore the company?");
         adb.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 ContentValues cv = new ContentValues();
-                if(isActive) cv.put(Companies.ACTIVE, 0);
+                if (isActive) cv.put(Companies.ACTIVE, 0);
                 else cv.put(Companies.ACTIVE, 1);
                 db = hlp.getWritableDatabase();
                 db.update(Companies.TABLE_COMPANIES, cv, Companies.KEY_ID + "=?", new String[]{companyKeyId});

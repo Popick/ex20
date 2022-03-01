@@ -17,15 +17,17 @@ public class new_user_activity extends AppCompatActivity {
     String id, a;
     int sum = 0, bikoret, num, allValid;
     ContentValues cv;
-
+    /**
+     * @author Etay Sabag <itay45520@gmail.com>
+     * @version    1.6
+     * @since     5/2/2022
+     *  activity for making a new user
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user);
-
         hlp = new HelperDB(this);
-
-
 
         idET = (EditText) findViewById(R.id.inputid);
         fnameET = (EditText) findViewById(R.id.inputfname);
@@ -37,6 +39,10 @@ public class new_user_activity extends AppCompatActivity {
 
     }
 
+    /**
+     * The function takes in the input from the input fields, checks if the input is valid and adds
+     * it to the data base.
+     */
     public void add(View view) {
         allValid = 0;
         if (fnameET.getText().length() == 0) {
@@ -83,14 +89,19 @@ public class new_user_activity extends AppCompatActivity {
 
     }
 
+    /**
+     * The function sends the user to the last activity.
+     */
     public void back(View view) {
         finish();
     }
 
-
+    /**
+     * The function checks if an ID is valid.
+     * @return true if ID is valid, false if the id is invalid.
+     */
     public boolean idVerification() {
         sum = 0;
-
         id = idET.getText().toString();
 
         if (id.length() == 9) {
@@ -100,23 +111,16 @@ public class new_user_activity extends AppCompatActivity {
                     sum = sum + num;
                 } else {
                     num = Character.getNumericValue(id.charAt(i));
-                    if ((num * 2) > 10) {
+                    if ((num * 2) > 9) {
                         a = Integer.toString(num * 2);
-                        for (int j = 0; j < 2; j++) {
-                            num = Character.getNumericValue(a.charAt(j));
-                            sum = sum + num;
-                        }
+                        sum = sum + Character.getNumericValue(a.charAt(0))+Character.getNumericValue(a.charAt(1));
                     } else
                         sum = sum + (num * 2);
                 }
             }
             bikoret = Character.getNumericValue(id.charAt(8));
 
-            if ((sum + bikoret) % 10 == 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return (sum + bikoret) % 10 == 0;
         } else {
             return false;
         }

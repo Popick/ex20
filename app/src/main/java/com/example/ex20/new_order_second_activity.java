@@ -1,13 +1,11 @@
 package com.example.ex20;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,10 +14,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
+/**
+ * @author Etay Sabag <itay45520@gmail.com>
+ * @version    1.2
+ * @since     20/2/2022
+ * second activity of making a new order
+ */
 public class new_order_second_activity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     Intent gi = getIntent();
     Spinner sp;
@@ -67,14 +71,17 @@ public class new_order_second_activity extends AppCompatActivity implements Adap
         }
         crsr.close();
         db.close();
-        adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, tbl);
+        adp = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, tbl);
         sp.setAdapter(adp);
 
         cv = new ContentValues();
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    /**
+     * The function checks if the inputs are okay and if so it saves the data in the orders data base
+     * and sends you back to the last activity.
+     */
     public void finish(View view) {
         db = hlp.getWritableDatabase();
         crsr = db.query(Users.TABLE_USERS, null, Users.KEY_ID + "=?", new String[]{userKeyIdET.getText().toString()}, null, null, null);
@@ -116,9 +123,11 @@ public class new_order_second_activity extends AppCompatActivity implements Adap
             cv.put(Orders.USER_NAME, user_order_name);
             cv.put(Orders.RESTAURANT_ID, restaurant_order_key_id);
             cv.put(Orders.RESTAURANT_NAME, restaurant_order_name);
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
-            LocalDateTime now = LocalDateTime.now();
-            cv.put(Orders.DATE,dtf.format(now));
+
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm");
+            cv.put(Orders.DATE,formatter.format(calendar.getTime()));
+
 
             db = hlp.getWritableDatabase();
             db.insert(Orders.TABLE_ORDERS, null, cv);
@@ -131,11 +140,16 @@ public class new_order_second_activity extends AppCompatActivity implements Adap
             Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show();
         }
     }
+    /**
+     * The function sends you back to the last activity.
+     */
     public void back(View view) {
         setResult(RESULT_CANCELED,gi);
         finish();
     }
-
+    /**
+     * The function sets the selected restaurant.
+     */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if(i==0){
